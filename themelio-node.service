@@ -1,0 +1,9 @@
+[Unit]
+Description=Start themelio-node
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /usr/bin/themelio-node
+
+[Install]
+WantedBy=multi-user.target

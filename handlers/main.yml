@@ -1,0 +1,7 @@
+---
+# handlers file for 
+handlers:
+- name: Listen
+  shell: "nohup ./themelio-node --listen 0.0.0.0:11814 --database database/db &"
+  args:
+    chdir: themelio-core/target/debug

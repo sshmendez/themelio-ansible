@@ -1,0 +1,57 @@
+---
+# tasks file for .
+- name: Starting node
+  hosts: nodes
+  tasks:
+    - name: Checking if themelio-core exists
+      stat:
+        path: "~/themelio-core"
+      register: core
+
+    - name: Fetching repo
+      command: "git clone https://github.com/themeliolabs/themelio-core.git"
+      when: not core.stat.exists
+
+    - name: Pull latest
+      command: "git pull origin master"
+      args:
+        chdir: themelio-core
+
+    - name: Building themelio-node
+      command: "~/.cargo/bin/cargo build --bin themelio-node"
+      args:
+        chdir: themelio-core
+
+    - name: Creating database file
+      file:
+        path: ~/themelio-core/target/debug/database
+        state: directory
+
+    - name: Stop current themelio-node proc
+      command: "pkill themelio-node"
+      ignore_errors: yes
+
+    - name: checking open port
+      wait_for:
+        port: 11814
+        state: stopped
+        timeout: 10
+      notify: Listen
+
+    - name: Listen
+      shell: "nohup ./themelio-node --listen 0.0.0.0:11814 --database database/db &"
+      args:
+        chdir: ~/themelio-core/target/debug
+  
+
+    - name: Checking successful start
+      wait_for:
+        port: 11814
+        state: started
+        timeout: 10
+
+  handlers:
+  - name: Listen
+    shell: "nohup ./themelio-node --listen 0.0.0.0:11814 --database database/db &"
+    args:
+      chdir: themelio-core/target/debug
