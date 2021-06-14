@@ -36,7 +36,6 @@
         port: 11814
         state: stopped
         timeout: 10
-      notify: Listen
 
     - name: Listen
       shell: "nohup ./themelio-node --listen 0.0.0.0:11814 --database database/db &"
@@ -49,9 +48,3 @@
         port: 11814
         state: started
         timeout: 10
-
-  handlers:
-  - name: Listen
-    shell: "nohup ./themelio-node --listen 0.0.0.0:11814 --database database/db &"
-    args:
-      chdir: themelio-core/target/debug
