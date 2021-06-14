@@ -1,3 +1,26 @@
+# Setup
+
+Make sure to install ansible on your system and ensure that you can ssh into all hosts
+
+Create an inventory  in `/etc/ansible/hosts` like this
+
+```
+[nodes]
+# IP ADDRESS OF FQDN HERE
+# ANOTHER HOST
+# themelionode.com
+```
+
+keep `[nodes]` in the file but replace everything starting with `#`
+
+
+# Run
+
+```
+ansible-playbook handlers/main.yml
+```
+
+
 Role Name
 =========
 
